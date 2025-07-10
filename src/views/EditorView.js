@@ -27,7 +27,13 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
             setClientName(existingQuote.clientName || '');
             setClientAddress(existingQuote.clientAddress || '');
             setClientContact(existingQuote.clientContact || '');
-            setItems(existingQuote.items.map(item => ({...item, id: Date.now() + Math.random()})) || []);
+            setItems(
+              existingQuote.items.map(item => ({
+                ...item,
+                id: Date.now() + Math.random(),
+                showPrice: item.isPackage ? item.showPrice : (item.showPrice ?? true) // <-- para simples
+              })) || []
+            );
         } else {
              setItems([]);
         }
@@ -58,7 +64,8 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
                 laborType: "Mano de Obra: Con Material",
                 value: product.value || 0,
                 isPackage: false,
-                subItems: []
+                subItems: [],
+                showPrice: true // SIEMPRE TRUE POR DEFECTO
             };
             setItems([...items, newItem]);
         }
@@ -76,7 +83,19 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
         setItems([...items, newItem]);
     };
 
-    const addItem = () => setItems([...items, { id: Date.now(), service: '', description: '', laborType: 'Mano de Obra: Con Material', value: 0, isPackage: false, subItems: [] }]);
+    const addItem = () => setItems([
+      ...items,
+      {
+        id: Date.now(),
+        service: '',
+        description: '',
+        laborType: 'Mano de Obra: Con Material',
+        value: 0,
+        isPackage: false,
+        subItems: [],
+        showPrice: true // SIEMPRE TRUE POR DEFECTO
+      }
+    ]);
     const removeItem = (index) => setItems(items.filter((_, i) => i !== index));
 
     const total = items.reduce((acc, item) => {
@@ -145,15 +164,32 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
                         ) : (
                             <div>
                                 <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-4 p-3" style={{backgroundColor: '#e0ffe0'}}>
-                                    <input type="text" value={item.service} onChange={e => handleItemChange(index, 'service', e.target.value)} className="w-full p-2 border rounded font-semibold" placeholder="Servicio (ej: Hidráulica)"/>
+                                    <input type="text" value={item.service} onChange={e => handleItemChange(index, 'service', e.target.value)} className="w-full p-2 border rounded font-semibold" placeholder="Servicio (ej: Hidráulica)" />
                                     <div className="flex items-center gap-2">
-                                        <input type="number" step="0.01" value={item.value} onChange={e => handleItemChange(index, 'value', e.target.value)} className="w-full p-2 border rounded text-right" placeholder="Total del servicio"/>
+                                        <input type="number" step="0.01" value={item.value} onChange={e => handleItemChange(index, 'value', e.target.value)} className="w-full p-2 border rounded text-right" placeholder="Total del servicio" />
                                         <button onClick={() => removeItem(index)} className="text-red-500 hover:text-red-700 p-2"><TrashIcon /></button>
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-4 p-3" style={{backgroundColor: '#e0e0ff'}}>
-                                    <textarea value={item.description} onChange={e => handleItemChange(index, 'description', e.target.value)} className="w-full p-2 border rounded" rows="2" placeholder="Descripción / Observaciones..."/>
-                                    <div className="flex items-center gap-2"><span className="font-semibold">Valor</span><select value={item.laborType} onChange={e => handleItemChange(index, 'laborType', e.target.value)} className="w-full p-2 border rounded bg-white"><option>Mano de Obra: Con Material</option><option>Mano de Obra: Sin Material</option></select></div>
+                                    <textarea value={item.description} onChange={e => handleItemChange(index, 'description', e.target.value)} className="w-full p-2 border rounded" rows="2" placeholder="Descripción / Observaciones..." />
+                                    <div className="flex items-center gap-2">
+                                        <span className="font-semibold">Valor</span>
+                                        <select value={item.laborType} onChange={e => handleItemChange(index, 'laborType', e.target.value)} className="w-full p-2 border rounded bg-white">
+                                          <option>Mano de Obra: Con Material</option>
+                                          <option>Mano de Obra: Sin Material</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-[2fr,1fr] gap-4 p-3 mt-2 bg-blue-100 rounded-b-lg items-center">
+                                  <div className="flex items-center gap-4">
+                                    <label className="flex items-center text-sm">
+                                      <input type="checkbox" checked={item.showPrice ?? true} onChange={e => handleItemChange(index, 'showPrice', e.target.checked)} className="mr-2" />
+                                      Mostrar precios
+                                    </label>
+                                  </div>
+                                  <p className="text-right font-bold text-lg">
+                                    {item.showPrice ? `$${parseFloat(item.value || 0).toFixed(2)}` : '-'}
+                                  </p>
                                 </div>
                             </div>
                         )}
