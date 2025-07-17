@@ -4,7 +4,6 @@ import { db } from '../firebase/config';
 import MessageModal from '../components/MessageModal';
 import SubItemSelectionModal from '../components/SubItemSelectionModal';
 import { PlusIcon, SaveIcon, TrashIcon } from '../assets/images/icons';
-// ¡Importante! Asegúrate de tener el archivo 'formatters.js' que creamos antes.
 import { formatPrice } from '../utils/formatters';
 
 export default function EditorView({ user, existingQuote, onSave, onCancel, setIsLoading }) {
@@ -19,9 +18,8 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
     const [currency, setCurrency] = useState('ARS'); 
     const [exchangeRate, setExchangeRate] = useState(null);
 
-    // --- EFECTOS (hooks de ciclo de vida) ---
 
-    // Obtiene la lista de productos del usuario desde Firebase
+
     useEffect(() => {
         const path = `artifacts/${user.uid}/products`;
         const q = query(collection(db, path));
@@ -29,7 +27,7 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
         return () => unsub();
     }, [user.uid]);
 
-    // Obtiene la tasa de cambio del Dólar Blue al cargar el componente
+
     useEffect(() => {
         const fetchExchangeRate = async () => {
             try {
@@ -40,13 +38,13 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
             } catch (error) {
                 console.error("Error al obtener la tasa de cambio:", error);
                 setModalMessage("No se pudo obtener la tasa de cambio. Se usará un valor de respaldo.");
-                setExchangeRate(1000); // Valor de respaldo por si falla la API
+                setExchangeRate(1000);
             }
         };
         fetchExchangeRate();
     }, []);
 
-    // Carga los datos de un presupuesto existente o inicializa uno nuevo
+
     useEffect(() => {
         if (existingQuote) {
             setClientName(existingQuote.clientName || '');
@@ -64,7 +62,7 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
         }
     }, [existingQuote]);
 
-    // --- MANEJADORES DE EVENTOS Y LÓGICA ---
+
 
     const handleItemChange = (index, field, value) => {
         const newItems = [...items];
@@ -78,7 +76,7 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
         setItems(newItems);
     };
     
-    // Función para convertir todos los precios del presupuesto
+
     const handleCurrencyConversion = (targetCurrency) => {
         if (!exchangeRate) {
             setModalMessage("La tasa de cambio no está disponible. Intente de nuevo.");
@@ -177,7 +175,7 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
             clientName, clientAddress, clientContact,
             items: items.map(({ id, ...rest }) => rest), 
             total,
-            currency, // Guardamos la moneda actual
+            currency, 
             userId: user.uid,
             createdAt: existingQuote?.createdAt || new Date(),
             updatedAt: new Date()
@@ -185,7 +183,6 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
         onSave(quoteData, !existingQuote);
     };
 
-    // --- RENDERIZADO DEL COMPONENTE (JSX) ---
 
     return (
         <>
@@ -209,7 +206,7 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
                         {items.map((item, index) => (
                         <div key={item.id} className="border rounded-lg overflow-hidden">
                             {item.isPackage ? (
-                                // --- VISTA PARA PAQUETES ---
+                                // --- PAQUETES ---
                                 <div className="p-3">
                                     <div className="flex justify-between items-center mb-2 bg-green-100 p-3 rounded-t-lg">
                                         <p className="font-bold text-lg text-green-800">{item.service}</p>
@@ -238,7 +235,7 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
                                     </div>
                                 </div>
                             ) : (
-                                // --- VISTA PARA ÍTEMS SIMPLES ---
+                                // --- ÍTEMS SIMPLES ---
                                 <div>
                                     <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-4 p-3" style={{backgroundColor: '#e0ffe0'}}>
                                         <input type="text" value={item.service} onChange={e => handleItemChange(index, 'service', e.target.value)} className="w-full p-2 border rounded font-semibold" placeholder="Servicio (ej: Hidráulica)" />
@@ -272,7 +269,7 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
                         ))}
                     </div>
                     
-                    {/* Botones de Acción y Conversión de Moneda */}
+
                     <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t pt-6">
                         <div className="flex items-center gap-4">
                             <button onClick={addItem} className="flex items-center gap-2 text-white bg-blue-600 hover:bg-blue-700 font-semibold py-2 px-4 rounded-lg"><PlusIcon/> Añadir Ítem</button>
@@ -290,7 +287,7 @@ export default function EditorView({ user, existingQuote, onSave, onCancel, setI
                     </div>
                 </div>
                 
-                {/* Total y Botones Finales */}
+
                 <div className="flex justify-end mt-8">
                     <div className="w-full max-w-sm">
                         <div className="flex justify-between font-bold text-xl text-gray-800 bg-gray-100 p-4 rounded-lg">

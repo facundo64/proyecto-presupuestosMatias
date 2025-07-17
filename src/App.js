@@ -3,7 +3,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { doc, runTransaction, getDoc, collection, addDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from './firebase/config';
 
-// Vistas
+
 import AuthView from './views/AuthView';
 import DashboardView from './views/DashboardView';
 import EditorView from './views/EditorView';

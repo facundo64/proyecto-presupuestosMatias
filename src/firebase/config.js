@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, setLogLevel } from 'firebase/firestore';
 
-// Tus credenciales de Firebase que ya configuraste
+
 const firebaseConfig = {
     apiKey: "AIzaSyC8MHpzuX11_GEGa5LfT7U53mQjMp7V6Hk",
     authDomain: "obra-azul-presupuestos.firebaseapp.com",

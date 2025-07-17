@@ -1,11 +1,11 @@
 import React from 'react';
 import { ReactComponent as Logo } from '../assets/images/obra-azul-horizontal.svg';
 import { DownloadIcon } from '../assets/images/icons';
-// ¡Importante! Asegúrate de que la ruta a tu archivo de utilidades sea correcta.
+
 import { formatPrice } from '../utils/formatters';
 
 export default function PreviewView({ quote, setView }) {
-    // Verificación para evitar errores si 'quote' no existe al cargar la vista
+
     if (!quote || !quote.createdAt) {
         return (
             <div className="text-center p-10">
@@ -75,17 +75,17 @@ export default function PreviewView({ quote, setView }) {
                             <p className="text-gray-600"><strong>Válido hasta:</strong> {validityDate.toLocaleDateString()}</p>
                         </div>
                     </div>
-                    {/* --- Cabecera de la tabla --- */}
+          
                     <div className="grid grid-cols-12 gap-4 px-3 pb-2 border-b-2 border-gray-300">
                         <div className="col-span-3"><h3 className="font-semibold text-gray-600 uppercase">Producto</h3></div>
                         <div className="col-span-7"><h3 className="font-semibold text-gray-600 uppercase">Descripción</h3></div>
                         <div className="col-span-2 text-right"><h3 className="font-semibold text-gray-600 uppercase">Total</h3></div>
                     </div>
-                    {/* --- Filas de la tabla --- */}
+
                     {quote.items.map((item, index) => (
                         <div key={index} className="border-b">
                             {item.isPackage ? (
-                                // --- Estructura para Paquetes ---
+                         
                                 <>
                                     <div className="grid grid-cols-12 gap-4 items-start pt-4">
                                         <div className="col-span-12"><p className="font-bold text-gray-800">{item.service}</p></div>
@@ -112,7 +112,7 @@ export default function PreviewView({ quote, setView }) {
                                     </div>
                                 </>
                             ) : (
-                                // Estructura para ítems simples
+                        
                                 <div className="grid grid-cols-12 gap-4 items-start py-4">
                                     <div className="col-span-3"><p className="font-bold text-gray-800 pt-1 break-words">{item.service}</p></div>
                                     <div className="col-span-7">
@@ -134,7 +134,7 @@ export default function PreviewView({ quote, setView }) {
                     ))}
                 </main>
 
-                {/* --- Total a Pagar --- */}
+
                 <div className="flex justify-end mt-8">
                     <div className="w-full max-w-md">
                         <div className="flex justify-between items-center font-bold text-lg text-gray-800 bg-gray-100 p-4 rounded-lg">
@@ -144,7 +144,7 @@ export default function PreviewView({ quote, setView }) {
                     </div>
                 </div>
 
-                {/* --- Términos y Condiciones Generales de Contratación de Servicios --- */}
+
                 <div className="mt-16 pt-8 border-t border-gray-200 text-xs text-gray-600">
                     <h3 className="text-base font-semibold text-gray-800 mb-6 text-center">Términos y Condiciones Generales de Contratación de Servicios</h3>
                     <div className="space-y-4">

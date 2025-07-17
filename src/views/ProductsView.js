@@ -52,7 +52,7 @@ export default function ProductsView({ user, setView, setIsLoading }) {
     
     const handleNew = () => {
         setEditingService({ 
-            id: null, // Importante para diferenciar entre nuevo y edición
+            id: null, 
             name: '', 
             type: 'simple', 
             value: '', 
