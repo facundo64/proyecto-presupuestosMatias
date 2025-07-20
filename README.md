@@ -37,6 +37,6 @@ Puedes visitar la pagina web del cliente:
   
 y la aplicacion desarrollada:
 
-- app.obraazulpiscinas.com
+- https://app.obraazulpiscinas.com
 
 
